@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v8.renderscript.*;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -41,21 +45,24 @@ public class MainActivity extends BaseUsosActivity {
 
     private RenderScript rs;
     private ImageView toolbarImage;
+    private List<FacultyInfo> childrenData = new ArrayList<>();
 
     private void loadFaculty(String facultyId)
     {
-        Observable<FacultyInfo> facObservable =  getUsosService().loadFacultyInfo(facultyId)
+        Observable<FacultyInfo> facObservable =  getUsos().getFaculty(facultyId)
                 .compose(lifecycleProvider.bindToLifecycle())
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).cache();
 
         setToolbarTitle(facObservable);
         loadCoverImage(facObservable);
+        loadChildren(facObservable);
     }
 
     private void setToolbarTitle(Observable<FacultyInfo> obs)
     {
         obs.subscribe(
-                info -> getSupportActionBar().setTitle(info.getFacName().get("en"))
+                info -> getSupportActionBar().setTitle(info.getFacName().get("en")),
+                ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
         );
     }
 
@@ -80,11 +87,22 @@ public class MainActivity extends BaseUsosActivity {
 
                                 @Override
                                 public void onError() {
+                                    Log.e(LOGTAG, "Failed to load cover photo");
                                 }
                             }
                     );
-                }
+                },
+                ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
         );
+    }
+
+    private void loadChildren(Observable<FacultyInfo> faculty)
+    {
+        getUsos()
+                .getFacultyChildren(faculty)
+                .limit(20)
+                .toList()
+                .subscribe(data -> childrenData = data);
     }
 
     @Override
@@ -100,6 +118,9 @@ public class MainActivity extends BaseUsosActivity {
                         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show()
         );
+
+        RecyclerView childrenList = (RecyclerView)findViewById(R.id.children_list);
+        childrenList.setLayoutManager(new LinearLayoutManager(this));
 
         loadFaculty(ROOT_FAC_ID);
     }

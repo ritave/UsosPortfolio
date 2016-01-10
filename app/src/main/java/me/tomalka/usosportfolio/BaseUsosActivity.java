@@ -14,12 +14,11 @@ import me.tomalka.usosdroid.UsosService;
  */
 public class BaseUsosActivity extends NaviAppCompatActivity {
     private static final String PROVIDER = "https://usosapps.uw.edu.pl/services/";
+    protected static final String LOGTAG = "me.tomalka.usosportfolio";
     private final Usos usos = new Usos(PROVIDER);
 
     protected final NaviComponent naviComponent = this;
     protected final ActivityLifecycleProvider lifecycleProvider = NaviLifecycle.createActivityLifecycleProvider(this);
 
-    protected UsosService getUsosService() {
-        return usos.getService();
-    }
+    protected Usos getUsos() { return usos; }
 }
