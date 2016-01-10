@@ -15,9 +15,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -61,7 +64,25 @@ public class MainActivity extends BaseUsosActivity {
         obs.subscribe(
                 info ->
                 {
-                    Picasso.with(this).load(info.getCoverUrls().get("screen")).into(toolbarImage);
+                    Picasso.with(this).load(info.getCoverUrls().get("screen")).into(
+                            toolbarImage,
+                            new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    View bottomScrim = findViewById(R.id.toolbar_scrim_bottom);
+                                    View settingScrim = findViewById(R.id.toolbar_scrim_settings);
+                                    bottomScrim.setVisibility(View.VISIBLE);
+                                    settingScrim.setVisibility(View.VISIBLE);
+                                    Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fadein);
+                                    bottomScrim.startAnimation(anim);
+                                    settingScrim.startAnimation(anim);
+                                }
+
+                                @Override
+                                public void onError() {
+                                }
+                            }
+                    );
                 }
         );
     }
