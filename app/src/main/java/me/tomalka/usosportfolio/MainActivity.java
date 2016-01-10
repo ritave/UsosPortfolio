@@ -1,53 +1,127 @@
 package me.tomalka.usosportfolio;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v8.renderscript.*;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import me.tomalka.usosdroid.jsonapis.FacultyInfo;
+import me.tomalka.usosdroid.jsonapis.InstallationInfo;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseUsosActivity {
+    private final String ROOT_FAC_ID = "00000000";
+
+    private RenderScript rs;
+    private ImageView toolbarImage;
+    private Toolbar toolbar;
+
+    private void loadFaculty(String facultyId)
+    {
+        Observable<FacultyInfo> facObservable =  getUsosService().loadFacultyInfo(facultyId)
+                .compose(lifecycleProvider.bindToLifecycle())
+                .subscribeOn(Schedulers.io());
+
+        setToolbarTitle(facObservable);
+        loadCoverImage(facObservable);
+    }
+
+    private void setToolbarTitle(Observable<FacultyInfo> obs)
+    {
+        obs.observeOn(AndroidSchedulers.mainThread()).subscribe(
+                info -> toolbar.setTitle(info.getFacName().get("en"))
+        );
+    }
+
+    private void loadCoverImage(Observable<FacultyInfo> obs)
+    {
+        obs.map(facultyInfo ->
+                {
+                    try {
+                        URL cover_url = new URL(facultyInfo.getCoverUrls().get("screen"));
+                        Bitmap bmp = BitmapFactory.decodeStream((InputStream) cover_url.getContent());
+                        final Allocation input = Allocation.createFromBitmap(rs, bmp);
+                        final Allocation output = Allocation.createTyped(rs, input.getType());
+                        final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+                        script.setRadius(20f);
+                        script.setInput(input);
+                        script.forEach(output);
+                        output.copyTo(bmp);
+                        return new BitmapDrawable(getResources(), bmp);
+                    } catch (IOException e) {
+                        Log.e("UsosApi", Log.getStackTraceString(e));
+                        return null;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        drawable -> toolbarImage.setImageDrawable(drawable),
+                        throwable -> Log.e("UsosApi", Log.getStackTraceString(throwable))
+                );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        setTheme(R.style.AppTheme);
+        setContentView(R.layout.activity_main);
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbarImage = (ImageView)findViewById(R.id.toolbar_image);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view ->
+                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+        );
+
+        rs = RenderScript.create(this);
+
+        /*
+        getUsosService().loadInstallationInfo()
+                .compose(lifecycleProvider.bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        info -> {
+                            toolbar.setTitle(((InstallationInfo) info).getInstitutionName().get("en"));
+                        },
+                        ex -> {
+                            Toast.makeText(this, String.format("Failed to load website: %s", ex.getMessage()), Toast.LENGTH_LONG).show();
+                            Log.e("UsosApi", ex.getMessage());
+                            Log.e("UsosApi", Log.getStackTraceString(ex));
+
+                        }
+                );*/
+
+        loadFaculty(ROOT_FAC_ID);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getUsosService()
-                .loadInstallationInfo()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        info -> Toast.makeText(this, info.getInstitutionName().get("en"), Toast.LENGTH_LONG).show(),
-                        ex -> {
-                            Toast.makeText(this, String.format("Failed to load website: %s", ex.getMessage()), Toast.LENGTH_LONG).show();
-                            Log.e("UsosApi", ex.getMessage());
-                            Log.e("UsosApi", Log.getStackTraceString(ex));
-                        }
-                );
     }
 
     @Override

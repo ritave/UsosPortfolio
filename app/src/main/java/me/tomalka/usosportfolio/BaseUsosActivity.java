@@ -1,6 +1,9 @@
 package me.tomalka.usosportfolio;
 
-import android.support.v7.app.AppCompatActivity;
+import com.trello.navi.NaviComponent;
+import com.trello.navi.component.NaviActivity;
+import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.navi.NaviLifecycle;
 
 import me.tomalka.usosdroid.Usos;
 import me.tomalka.usosdroid.UsosService;
@@ -8,22 +11,12 @@ import me.tomalka.usosdroid.UsosService;
 /**
  * Created by Ritave on 2016-01-09.
  */
-public class BaseUsosActivity extends AppCompatActivity {
+public class BaseUsosActivity extends NaviActivity {
     private static final String PROVIDER = "https://usosapps.uw.edu.pl/services/";
-    private Usos usos = new Usos(PROVIDER);
+    private final Usos usos = new Usos(PROVIDER);
 
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        usos.onStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        usos.onStop();
-    }*/
+    protected final NaviComponent naviComponent = this;
+    protected final ActivityLifecycleProvider lifecycleProvider = NaviLifecycle.createActivityLifecycleProvider(this);
 
     protected UsosService getUsosService() {
         return usos.getService();
