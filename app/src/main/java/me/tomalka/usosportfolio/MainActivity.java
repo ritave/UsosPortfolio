@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -42,7 +44,7 @@ public class MainActivity extends BaseUsosActivity {
     {
         Observable<FacultyInfo> facObservable =  getUsosService().loadFacultyInfo(facultyId)
                 .compose(lifecycleProvider.bindToLifecycle())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).cache();
 
         setToolbarTitle(facObservable);
         loadCoverImage(facObservable);
@@ -50,36 +52,19 @@ public class MainActivity extends BaseUsosActivity {
 
     private void setToolbarTitle(Observable<FacultyInfo> obs)
     {
-        obs.observeOn(AndroidSchedulers.mainThread()).subscribe(
+        obs.subscribe(
                 info -> toolbar.setTitle(info.getFacName().get("en"))
         );
     }
 
     private void loadCoverImage(Observable<FacultyInfo> obs)
     {
-        obs.map(facultyInfo ->
+        obs.subscribe(
+                info ->
                 {
-                    try {
-                        URL cover_url = new URL(facultyInfo.getCoverUrls().get("screen"));
-                        Bitmap bmp = BitmapFactory.decodeStream((InputStream) cover_url.getContent());
-                        /*final Allocation input = Allocation.createFromBitmap(rs, bmp);
-                        final Allocation output = Allocation.createTyped(rs, input.getType());
-                        final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-                        script.setRadius(20f);
-                        script.setInput(input);
-                        script.forEach(output);
-                        output.copyTo(bmp);*/
-                        return new BitmapDrawable(getResources(), bmp);
-                    } catch (IOException e) {
-                        Log.e("UsosApi", Log.getStackTraceString(e));
-                        return null;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        drawable -> toolbarImage.setImageDrawable(drawable),
-                        throwable -> Log.e("UsosApi", Log.getStackTraceString(throwable))
-                );
+                    Picasso.with(this).load(info.getCoverUrls().get("screen")).into(toolbarImage);
+                }
+        );
     }
 
     @Override
