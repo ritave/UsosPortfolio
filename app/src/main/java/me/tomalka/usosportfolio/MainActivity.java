@@ -62,13 +62,13 @@ public class MainActivity extends BaseUsosActivity {
                     try {
                         URL cover_url = new URL(facultyInfo.getCoverUrls().get("screen"));
                         Bitmap bmp = BitmapFactory.decodeStream((InputStream) cover_url.getContent());
-                        final Allocation input = Allocation.createFromBitmap(rs, bmp);
+                        /*final Allocation input = Allocation.createFromBitmap(rs, bmp);
                         final Allocation output = Allocation.createTyped(rs, input.getType());
                         final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
                         script.setRadius(20f);
                         script.setInput(input);
                         script.forEach(output);
-                        output.copyTo(bmp);
+                        output.copyTo(bmp);*/
                         return new BitmapDrawable(getResources(), bmp);
                     } catch (IOException e) {
                         Log.e("UsosApi", Log.getStackTraceString(e));
@@ -85,8 +85,6 @@ public class MainActivity extends BaseUsosActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
