@@ -37,6 +37,12 @@
                 android:layout_height="@dimen/toolbar_scrim_height"
                 android:layout_gravity="bottom"
                 android:background="@drawable/shape_scrim"/>
+            <View
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/shape_scrim_settings_corner"
+                android:layout_gravity="right|top"
+                />
 
 
             <android.support.v7.widget.Toolbar

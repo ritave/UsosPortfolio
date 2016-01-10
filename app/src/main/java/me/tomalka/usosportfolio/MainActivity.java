@@ -38,7 +38,6 @@ public class MainActivity extends BaseUsosActivity {
 
     private RenderScript rs;
     private ImageView toolbarImage;
-    private Toolbar toolbar;
 
     private void loadFaculty(String facultyId)
     {
@@ -53,7 +52,7 @@ public class MainActivity extends BaseUsosActivity {
     private void setToolbarTitle(Observable<FacultyInfo> obs)
     {
         obs.subscribe(
-                info -> toolbar.setTitle(info.getFacName().get("en"))
+                info -> getSupportActionBar().setTitle(info.getFacName().get("en"))
         );
     }
 
@@ -71,33 +70,15 @@ public class MainActivity extends BaseUsosActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
         toolbarImage = (ImageView)findViewById(R.id.toolbar_image);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view ->
                         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show()
         );
-
-        rs = RenderScript.create(this);
-
-        /*
-        getUsosService().loadInstallationInfo()
-                .compose(lifecycleProvider.bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        info -> {
-                            toolbar.setTitle(((InstallationInfo) info).getInstitutionName().get("en"));
-                        },
-                        ex -> {
-                            Toast.makeText(this, String.format("Failed to load website: %s", ex.getMessage()), Toast.LENGTH_LONG).show();
-                            Log.e("UsosApi", ex.getMessage());
-                            Log.e("UsosApi", Log.getStackTraceString(ex));
-
-                        }
-                );*/
 
         loadFaculty(ROOT_FAC_ID);
     }
