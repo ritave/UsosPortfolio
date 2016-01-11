@@ -26,8 +26,6 @@ public class FacultyInfo {
     @SerializedName("postal_address")
     String postalAddress;
 
-    List<FacultyInfo> children = new ArrayList<>();
-
     public String getFacultyId() {
         return facId;
     }
@@ -39,9 +37,6 @@ public class FacultyInfo {
     }
     public boolean isPublic() {
         return isPublic;
-    }
-    public List<FacultyInfo> getChildren() {
-        return children;
     }
     public String getHomepageUrl() {
         return homepageUrl;

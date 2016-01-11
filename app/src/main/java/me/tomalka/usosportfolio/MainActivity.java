@@ -83,10 +83,10 @@ public class MainActivity extends BaseUsosActivity {
                                     View bottomScrim = findViewById(R.id.toolbar_scrim_bottom);
                                     View settingScrim = findViewById(R.id.toolbar_scrim_settings);
                                     bottomScrim.setVisibility(View.VISIBLE);
-                                    settingScrim.setVisibility(View.VISIBLE);
+                                    //settingScrim.setVisibility(View.VISIBLE);
                                     Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fadein);
                                     bottomScrim.startAnimation(anim);
-                                    settingScrim.startAnimation(anim);
+                                    //settingScrim.startAnimation(anim);
                                 }
 
                                 @Override
@@ -109,8 +109,7 @@ public class MainActivity extends BaseUsosActivity {
             obs = obs.filter(info -> info.getCoverUrls().get("screen") != null &&
                     (info.getPhoneNumbers().size() != 0 || (info.getPostalAddress() != null && !info.getPostalAddress().isEmpty())));
 
-        obs.limit(20)
-                .observeOn(AndroidSchedulers.mainThread())
+        obs.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         data -> {
                             childrenData.add(data);
@@ -145,6 +144,11 @@ public class MainActivity extends BaseUsosActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return false;
     }
 
     @Override
