@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#e18f14</color>
     <color name="colorAccent">#FF4081</color>
     <color name="usosBGDark">#fcfefc</color>
+    <color name="children_light">#323232</color>
+    <color name="children_dark">#fff</color>
 </resources>

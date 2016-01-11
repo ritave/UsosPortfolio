@@ -14,7 +14,7 @@ import me.tomalka.usosdroid.UsosService;
  */
 public class BaseUsosActivity extends NaviAppCompatActivity {
     private static final String PROVIDER = "https://usosapps.uw.edu.pl/services/";
-    protected static final String LOGTAG = "me.tomalka.usosportfolio";
+    public static final String LOGTAG = "usosportfolio";
     private final Usos usos = new Usos(PROVIDER);
 
     protected final NaviComponent naviComponent = this;

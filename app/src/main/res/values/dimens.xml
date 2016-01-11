@@ -6,4 +6,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbar_scrim_height">80dp</dimen>
-</resources>
+    <dimen name="children_scrim_height">60dp</dimen>
+
+\</resources>

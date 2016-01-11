@@ -46,6 +46,7 @@ public class MainActivity extends BaseUsosActivity {
     private RenderScript rs;
     private ImageView toolbarImage;
     private List<FacultyInfo> childrenData = new ArrayList<>();
+    private FacultyInfoAdapter childrenAdapter = new FacultyInfoAdapter(childrenData);
 
     private void loadFaculty(String facultyId)
     {
@@ -61,7 +62,7 @@ public class MainActivity extends BaseUsosActivity {
     private void setToolbarTitle(Observable<FacultyInfo> obs)
     {
         obs.subscribe(
-                info -> getSupportActionBar().setTitle(info.getFacName().get("en")),
+                info -> getSupportActionBar().setTitle(info.getFacName().get("pl")),
                 ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
         );
     }
@@ -102,7 +103,15 @@ public class MainActivity extends BaseUsosActivity {
                 .getFacultyChildren(faculty)
                 .limit(20)
                 .toList()
-                .subscribe(data -> childrenData = data);
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        data -> {
+                            childrenData.clear();
+                            childrenData.addAll(data);
+                            childrenAdapter.notifyDataSetChanged();
+                        },
+                        ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
+                );
     }
 
     @Override
@@ -121,6 +130,7 @@ public class MainActivity extends BaseUsosActivity {
 
         RecyclerView childrenList = (RecyclerView)findViewById(R.id.children_list);
         childrenList.setLayoutManager(new LinearLayoutManager(this));
+        childrenList.setAdapter(childrenAdapter);
 
         loadFaculty(ROOT_FAC_ID);
     }
