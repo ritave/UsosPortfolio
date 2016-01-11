@@ -17,8 +17,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 import me.tomalka.usosdroid.jsonapis.InstallationInfo;
 import rx.Observable;
@@ -102,13 +105,11 @@ public class MainActivity extends BaseUsosActivity {
         getUsos()
                 .getFacultyChildren(faculty)
                 .limit(20)
-                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         data -> {
-                            childrenData.clear();
-                            childrenData.addAll(data);
-                            childrenAdapter.notifyDataSetChanged();
+                            childrenData.add(data);
+                            childrenAdapter.notifyItemInserted(childrenData.size() - 1);
                         },
                         ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
                 );
@@ -131,6 +132,7 @@ public class MainActivity extends BaseUsosActivity {
         RecyclerView childrenList = (RecyclerView)findViewById(R.id.children_list);
         childrenList.setLayoutManager(new LinearLayoutManager(this));
         childrenList.setAdapter(childrenAdapter);
+        childrenList.setItemAnimator(new SlideInLeftAnimator(new DecelerateInterpolator()));
 
         loadFaculty(ROOT_FAC_ID);
     }

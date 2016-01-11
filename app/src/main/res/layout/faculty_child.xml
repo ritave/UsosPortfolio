@@ -10,9 +10,9 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardElevation="2dp"
+    card_view:cardElevation="5dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="0dp">
+    card_view:cardCornerRadius="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:src="@drawable/usoslogo1_gradient_dark"
                 android:id="@+id/children_faculty_cover"/>
 
             <View
@@ -32,7 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/children_scrim_height"
                 android:layout_gravity="bottom"
-                android:visibility="gone"
                 android:background="@drawable/shape_scrim"/>
 
             <TextView
@@ -42,6 +42,7 @@
                 android:layout_margin="10dp"
                 android:text="Test text"
                 android:textSize="20sp"
+                android:textColor="@color/children_dark"
                 android:layout_gravity="bottom" />
         </FrameLayout>
     </RelativeLayout>
