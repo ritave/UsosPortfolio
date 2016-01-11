@@ -48,7 +48,7 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
         Context context = holder.itemView.getContext();
 
         Picasso.with(context).cancelRequest(holder.cover);
-        Picasso.with(context).load(info.getCoverUrls().get("screen"))
+        Picasso.with(context).load(info.getCoverPhotoUrl())
                 .placeholder(R.drawable.usoslogo1_gradient_dark)
                 .error(R.drawable.usoslogo1_gradient_dark)
                 .into(holder.cover);

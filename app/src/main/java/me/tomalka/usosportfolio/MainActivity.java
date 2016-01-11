@@ -75,7 +75,7 @@ public class MainActivity extends BaseUsosActivity {
         obs.subscribe(
                 info ->
                 {
-                    Picasso.with(this).load(info.getCoverUrls().get("screen")).into(
+                    Picasso.with(this).load(info.getCoverPhotoUrl()).into(
                             toolbarImage,
                             new Callback() {
                                 @Override
@@ -106,7 +106,7 @@ public class MainActivity extends BaseUsosActivity {
                 .getFacultyChildren(faculty);
 
         if (DEMO_MODE == true) // Nice hack huh ;)
-            obs = obs.filter(info -> info.getCoverUrls().get("screen") != null &&
+            obs = obs.filter(info -> info.gotAnyCoverPhoto() &&
                     (info.getPhoneNumbers().size() != 0 || (info.getPostalAddress() != null && !info.getPostalAddress().isEmpty())));
 
         obs.observeOn(AndroidSchedulers.mainThread())

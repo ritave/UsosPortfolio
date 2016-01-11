@@ -1,5 +1,7 @@
 package me.tomalka.usosdroid.jsonapis;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -12,28 +14,27 @@ import java.util.Map;
  */
 public class FacultyInfo {
     @SerializedName("id")
-    String facId;
+    private String facId;
     @SerializedName("name")
-    Map<String, String> facName = new HashMap<>();
+    private Map<String, String> facName = new HashMap<>();
     @SerializedName("cover_urls")
-    Map<String, String> coverUrls = new HashMap<>();
+    private Map<String, String> coverUrls = new HashMap<>();
     @SerializedName("is_public")
-    boolean isPublic;
+    private boolean isPublic;
     @SerializedName("homepage_url")
-    String homepageUrl;
+    private String homepageUrl;
     @SerializedName("phone_numbers")
-    List<String> phoneNumbers = new ArrayList<>();
+    private List<String> phoneNumbers = new ArrayList<>();
     @SerializedName("postal_address")
-    String postalAddress;
+    private String postalAddress;
+    @SerializedName("static_map_urls")
+    private Map<String, String> mapUrls = new HashMap<>();
 
     public String getFacultyId() {
         return facId;
     }
     public Map<String, String> getFacName() {
         return facName;
-    }
-    public Map<String, String> getCoverUrls() {
-        return coverUrls;
     }
     public boolean isPublic() {
         return isPublic;
@@ -46,5 +47,19 @@ public class FacultyInfo {
     }
     public String getPostalAddress() {
         return postalAddress;
+    }
+
+    public boolean gotAnyCoverPhoto()
+    {
+        return mapUrls.get("800x400") != null || coverUrls.size() != 0;
+    }
+
+    public String getCoverPhotoUrl()
+    {
+        if (coverUrls.get("screen") != null)
+            return coverUrls.get("screen");
+        if (mapUrls.get("800x400") != null)
+            return mapUrls.get("800x400");
+        return null;
     }
 }
