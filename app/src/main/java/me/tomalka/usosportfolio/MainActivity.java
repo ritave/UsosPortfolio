@@ -102,9 +102,14 @@ public class MainActivity extends BaseUsosActivity {
 
     private void loadChildren(Observable<FacultyInfo> faculty)
     {
-        getUsos()
-                .getFacultyChildren(faculty)
-                .limit(20)
+        Observable<FacultyInfo> obs = getUsos()
+                .getFacultyChildren(faculty);
+
+        if (DEMO_MODE == true) // Nice hack huh ;)
+            obs = obs.filter(info -> info.getCoverUrls().get("screen") != null &&
+                    (info.getPhoneNumbers().size() != 0 || (info.getPostalAddress() != null && !info.getPostalAddress().isEmpty())));
+
+        obs.limit(20)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         data -> {

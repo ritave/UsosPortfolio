@@ -3,8 +3,14 @@ package me.tomalka.usosportfolio;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +24,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 
@@ -47,6 +54,11 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
                 .into(holder.cover);
 
         holder.title.setText(info.getFacName().get("pl"));
+        holder.setAddress(info.getPostalAddress());
+        if (info.getPhoneNumbers().size() != 0)
+            holder.setTelephone(info.getPhoneNumbers().get(0));
+        else
+            holder.setTelephone("");
     }
 
     @Override
@@ -59,6 +71,10 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
         CardView cardView;
         TextView title;
         ImageView cover;
+        private TextView address;
+        private TextView telephone;
+        private View addressLayout;
+        private View telephoneLayout;
 
         FacultyInfoHolder(View itemView) {
             super(itemView);
@@ -66,6 +82,39 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
             cardView = (CardView)itemView.findViewById(R.id.children_card);
             title = (TextView)itemView.findViewById(R.id.faculty_child_name);
             cover = (ImageView)itemView.findViewById(R.id.children_faculty_cover);
+            address = (TextView)itemView.findViewById(R.id.children_mappin_text);
+            telephone = (TextView)itemView.findViewById(R.id.children_telephone_text);
+            addressLayout = itemView.findViewById(R.id.children_map_layout);
+            telephoneLayout = itemView.findViewById(R.id.children_telephone_layout);
+
+
+            address.setOnClickListener(o -> {
+                Intent geoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+address.getText().toString()));
+                itemView.getContext().startActivity(geoIntent);
+            });
+        }
+
+        public void setTelephone(String telephone)
+        {
+            if (telephone != null && !telephone.isEmpty())
+            {
+                this.telephone.setText(telephone);
+                telephoneLayout.setVisibility(View.VISIBLE);
+            } else
+                telephoneLayout.setVisibility(View.GONE);
+        }
+
+        public void setAddress(String address)
+        {
+            if (address != null && !address.isEmpty())
+            {
+                // Forcing map link because not detected otherwise
+                SpannableString spanStr = new SpannableString(address);
+                spanStr.setSpan(new UnderlineSpan(), 0, spanStr.length(), 0);
+                this.address.setText(spanStr);
+                addressLayout.setVisibility(View.VISIBLE);
+            } else
+                addressLayout.setVisibility(View.GONE);
         }
     }
 }
