@@ -21,4 +21,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="FacultyCard" parent="CardView">
+        <item name="cardBackgroundColor">@android:color/white</item>
+        <item name="cardElevation">3dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="coverPhoto">@drawable/usoslogo1_gradient_dark</item>
+        <item name="coverTitle">Test faculty</item>
+        <item name="telephoneNumber">555-123-456</item>
+        <item name="facultyAddress">2945 Pine Street Wadsworth, OH 44281</item>
+    </style>
 </resources>

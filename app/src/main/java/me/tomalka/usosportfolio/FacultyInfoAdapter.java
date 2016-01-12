@@ -1,30 +1,13 @@
 package me.tomalka.usosportfolio;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 
@@ -38,8 +21,8 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
 
     @Override
     public FacultyInfoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.faculty_child, parent, false);
-        return new FacultyInfoHolder(v);
+        FacultyCard card = (FacultyCard) LayoutInflater.from(parent.getContext()).inflate(R.layout.faculty_card_row, parent, false);
+        return new FacultyInfoHolder(card);
     }
 
     @Override
@@ -47,18 +30,20 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
         FacultyInfo info = faculties.get(position);
         Context context = holder.itemView.getContext();
 
-        Picasso.with(context).cancelRequest(holder.cover);
-        Picasso.with(context).load(info.getCoverPhotoUrl())
-                .placeholder(R.drawable.usoslogo1_gradient_dark)
-                .error(R.drawable.usoslogo1_gradient_dark)
-                .into(holder.cover);
+        holder.card.setCoverPhoto(
+                Picasso
+                        .with(context)
+                        .load(info.getCoverPhotoUrl())
+                        .placeholder(R.drawable.usoslogo1_gradient_dark)
+                        .error(R.drawable.usoslogo1_gradient_dark)
+        );
 
-        holder.title.setText(info.getFacName().get("pl"));
-        holder.setAddress(info.getPostalAddress());
+        holder.card.setCoverTitle(info.getFacName().get("pl"));
+        holder.card.setFacultyAddress(info.getPostalAddress());
         if (info.getPhoneNumbers().size() != 0)
-            holder.setTelephone(info.getPhoneNumbers().get(0));
+            holder.card.setTelephoneNumber(info.getPhoneNumbers().get(0));
         else
-            holder.setTelephone("");
+            holder.card.setTelephoneNumber("");
     }
 
     @Override
@@ -68,53 +53,11 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
 
 
     public static class FacultyInfoHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        TextView title;
-        ImageView cover;
-        private TextView address;
-        private TextView telephone;
-        private View addressLayout;
-        private View telephoneLayout;
+        public FacultyCard card;
 
-        FacultyInfoHolder(View itemView) {
-            super(itemView);
-
-            cardView = (CardView)itemView.findViewById(R.id.children_card);
-            title = (TextView)itemView.findViewById(R.id.faculty_child_name);
-            cover = (ImageView)itemView.findViewById(R.id.children_faculty_cover);
-            address = (TextView)itemView.findViewById(R.id.children_mappin_text);
-            telephone = (TextView)itemView.findViewById(R.id.children_telephone_text);
-            addressLayout = itemView.findViewById(R.id.children_map_layout);
-            telephoneLayout = itemView.findViewById(R.id.children_telephone_layout);
-
-
-            address.setOnClickListener(o -> {
-                Intent geoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+address.getText().toString()));
-                itemView.getContext().startActivity(geoIntent);
-            });
-        }
-
-        public void setTelephone(String telephone)
-        {
-            if (telephone != null && !telephone.isEmpty())
-            {
-                this.telephone.setText(telephone);
-                telephoneLayout.setVisibility(View.VISIBLE);
-            } else
-                telephoneLayout.setVisibility(View.GONE);
-        }
-
-        public void setAddress(String address)
-        {
-            if (address != null && !address.isEmpty())
-            {
-                // Forcing map link because not detected otherwise
-                SpannableString spanStr = new SpannableString(address);
-                spanStr.setSpan(new UnderlineSpan(), 0, spanStr.length(), 0);
-                this.address.setText(spanStr);
-                addressLayout.setVisibility(View.VISIBLE);
-            } else
-                addressLayout.setVisibility(View.GONE);
+        FacultyInfoHolder(FacultyCard card) {
+            super(card);
+            this.card = card;
         }
     }
 }

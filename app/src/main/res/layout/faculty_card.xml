@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/children_card"
-    android:layout_marginLeft="14dp"
-    android:layout_marginRight="14dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardElevation="3dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="2dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/toolbar_scrim_height"
-            android:id="@+id/children_framelayout"
             android:clickable="true">
             <ImageView
                 android:layout_width="match_parent"
@@ -30,7 +19,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/usoslogo1_gradient_dark"
-                android:id="@+id/children_faculty_cover"/>
+                android:id="@+id/faculty_card_cover"/>
 
             <View
                 android:layout_width="match_parent"
@@ -41,7 +30,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/faculty_child_name"
+                android:id="@+id/faculty_card_title"
                 android:layout_margin="10dp"
                 android:text="Test faculty"
                 android:textSize="20sp"
@@ -52,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/children_map_layout"
+            android:id="@+id/faculty_card_map_view"
             android:paddingRight="16dp">
 
             <ImageView
@@ -64,17 +53,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="15sp"
-                android:id="@+id/children_mappin_text"
+                android:id="@+id/faculty_card_map_text"
                 android:gravity="center_vertical"
-                android:autoLink="map"
                 android:textColor="@android:color/holo_green_dark"
-                android:text="Ul. Banacha 2a 02-093 Warszaw"/>
+                android:text="2945 Pine Street Wadsworth, OH 44281"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/children_telephone_layout"
+            android:id="@+id/faculty_card_phone_view"
             android:paddingRight="16dp">
 
             <ImageView
@@ -85,11 +73,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/children_telephone_text"
+                android:id="@+id/faculty_card_phone_text"
                 android:gravity="center_vertical"
+                android:textColor="@android:color/holo_green_dark"
                 android:textColorLink="@android:color/holo_green_dark"
                 android:autoLink="phone"
-                android:text="520-123-456"/>
+                android:text="555-123-456"/>
         </LinearLayout>
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</merge>
