@@ -67,7 +67,9 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
                 .compose(lifecycleProvider.bindToLifecycle())
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).cache();
 
-        facObservable.subscribe(faculty -> rootFaculty = faculty);
+        facObservable.subscribe(
+                faculty -> rootFaculty = faculty,
+                ex -> Log.e(LOGTAG, Log.getStackTraceString(ex)));
 
         setToolbarTitle(facObservable);
         loadCoverImage(facObservable);
