@@ -1,6 +1,7 @@
 package me.tomalka.usosportfolio;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class RootInfoFragment extends Fragment {
     private static final String ARG_FACULTY = "faculty";
@@ -30,8 +32,9 @@ public class RootInfoFragment extends Fragment {
     private FacultyCard facultyCard;
     private int cx;
     private int cy;
+    private boolean animationInProgress = false;
 
-    //private OnFragmentInteractionListener mListener;
+    private RootInfoFragmentListener mListener;
 
     public RootInfoFragment() {
     }
@@ -82,13 +85,12 @@ public class RootInfoFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof RootInfoFragmentListener) {
+            mListener = (RootInfoFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -103,6 +105,11 @@ public class RootInfoFragment extends Fragment {
     }
 
     private void animate(boolean inverse, int cx, int cy) {
+        if (animationInProgress)
+            return;
+
+        animationInProgress = true;
+
         if (cx == -1 || cy == -1) {
             cx = this.cx;
             cy = this.cy;
@@ -122,15 +129,23 @@ public class RootInfoFragment extends Fragment {
                 .createCircularReveal(root.findViewById(R.id.fragment_anim_layout), cx, cy, startRadius, finalRadius);
         animator.setDuration(500);
 
-        // So animator has some problems with finished callbacks...;
-        if (inverse)
-            Observable
-                    .just(null)
-                    .delay(500, TimeUnit.MILLISECONDS)
-                    .subscribe(
-                            n -> getActivity().getSupportFragmentManager().popBackStack(),
-                            ex -> Log.e(BaseUsosActivity.LOGTAG, Log.getStackTraceString(ex)));
+        // So supportanimator has some problems with finished callbacks...;
+        Observable
+                .just(null)
+                .delay(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(n -> {
+                            animationInProgress = false;
+                            if (inverse)
+                                mListener.RequestClose();
+                        },
+                        ex -> Log.e(BaseUsosActivity.LOGTAG, Log.getStackTraceString(ex))
+                );
 
         animator.start();
+    }
+
+    public static interface RootInfoFragmentListener {
+        void RequestClose();
     }
 }

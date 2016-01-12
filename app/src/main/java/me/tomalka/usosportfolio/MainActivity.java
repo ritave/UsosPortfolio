@@ -46,7 +46,7 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseUsosActivity {
+public class MainActivity extends BaseUsosActivity implements RootInfoFragment.RootInfoFragmentListener {
     private final String ROOT_FAC_ID = "00000000";
 
     private ImageView toolbarImage;
@@ -54,6 +54,12 @@ public class MainActivity extends BaseUsosActivity {
     private FacultyInfoAdapter childrenAdapter = new FacultyInfoAdapter(childrenData);
     private FacultyInfo rootFaculty;
     RootInfoFragment infoFragment;
+
+    @Override
+    public void RequestClose() {
+        getSupportFragmentManager().popBackStack();
+        infoFragment = null;
+    }
 
     private void loadFaculty(String facultyId)
     {
@@ -143,14 +149,9 @@ public class MainActivity extends BaseUsosActivity {
     @Override
     public void onBackPressed() {
         if (infoFragment != null) {
-            if (infoFragment.onBackPressed())
-                detachInfoFragment();
+            infoFragment.onBackPressed();
         } else
             super.onBackPressed();
-    }
-
-    private void detachInfoFragment() {
-        infoFragment = null;
     }
 
     @Override
@@ -189,6 +190,7 @@ public class MainActivity extends BaseUsosActivity {
         return true;
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -197,9 +199,9 @@ public class MainActivity extends BaseUsosActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //if (id == R.id.action_settings) {
+         //   return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
