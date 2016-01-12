@@ -25,7 +25,8 @@
             android:layout_marginRight="10dp"
             android:layout_gravity="center"
             android:id="@+id/root_info_card"
-            app:cardElevation="10dp" />
+            app:cardElevation="10dp"
+            android:clickable="true"/>
     </FrameLayout>
 
 </io.codetail.widget.RevealFrameLayout>
