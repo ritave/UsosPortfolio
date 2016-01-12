@@ -110,8 +110,7 @@ public class MainActivity extends BaseUsosActivity {
                     (info.getPhoneNumbers().size() != 0 || (info.getPostalAddress() != null && !info.getPostalAddress().isEmpty())));
 
         obs.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        data -> {
+                .subscribe(data -> {
                             childrenData.add(data);
                             childrenAdapter.notifyItemInserted(childrenData.size() - 1);
                         },

@@ -1,5 +1,7 @@
 package me.tomalka.usosdroid;
 
+import android.util.Log;
+
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 import retrofit2.Retrofit;
 import retrofit2.GsonConverterFactory;
@@ -8,7 +10,7 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 
 public class Usos {
-    private static final int MAX_FACULTIES_PER_REQUEST = 800;
+    private static final int MAX_FACULTIES_PER_REQUEST = 500;
     private String provider;
     private Retrofit retrofit;
     private UsosService service;
@@ -16,10 +18,12 @@ public class Usos {
     private Observable<FacultyInfo> mergeFacultyRequests(Observable<FacultyInfo> result, StringBuilder piped)
     {
         piped.setLength(piped.length() - 1);
-        return result.mergeWith(
+        return result.concatWith(
                 service
                         .loadFaculties(piped.toString())
                         .flatMap(facsMap -> Observable.from(facsMap.values()))
+                        .observeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.io())
         );
     }
 
@@ -65,6 +69,7 @@ public class Usos {
     {
         // Load a list of children ids, and then load info about each one
         return info
+                .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .flatMap(facInfo -> service.loadFacultyChildrenIds(facInfo.getFacultyId()))
                 .flatMap(idsList -> getFaculties(idsList))
