@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
+import me.tomalka.usosdroid.jsonapis.FacultyInfo;
+
 public class FacultyCard extends CardView {
     private ImageView coverImage;
     private TextView coverTitle;
@@ -38,6 +40,25 @@ public class FacultyCard extends CardView {
     public FacultyCard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
+    }
+
+    public void fromFacultyInfo(FacultyInfo info) {
+        Context context = getContext();
+
+        setCoverPhoto(
+                Picasso
+                        .with(context)
+                        .load(info.getCoverPhotoUrl())
+                        .placeholder(R.drawable.usoslogo1_gradient_dark)
+                        .error(R.drawable.usoslogo1_gradient_dark)
+        );
+
+        setCoverTitle(info.getFacName().get("pl"));
+        setFacultyAddress(info.getPostalAddress());
+        if (info.getPhoneNumbers().size() != 0)
+            setTelephoneNumber(info.getPhoneNumbers().get(0));
+        else
+            setTelephoneNumber("");
     }
 
     public void setCoverPhoto(Drawable drawable) {

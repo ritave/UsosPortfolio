@@ -7,4 +7,5 @@
     <color name="children_light">#323232</color>
     <color name="children_dark">#fff</color>
     <color name="fabColor">#408BFB</color>
+    <color name="rootInfoTint">#CC000000</color>
 </resources>

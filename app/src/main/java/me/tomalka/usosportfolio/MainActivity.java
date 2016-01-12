@@ -1,5 +1,6 @@
 package me.tomalka.usosportfolio;
 
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -46,16 +49,19 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends BaseUsosActivity {
     private final String ROOT_FAC_ID = "00000000";
 
-    private RenderScript rs;
     private ImageView toolbarImage;
     private List<FacultyInfo> childrenData = new ArrayList<>();
     private FacultyInfoAdapter childrenAdapter = new FacultyInfoAdapter(childrenData);
+    private FacultyInfo rootFaculty;
+    RootInfoFragment infoFragment;
 
     private void loadFaculty(String facultyId)
     {
         Observable<FacultyInfo> facObservable =  getUsos().getFaculty(facultyId)
                 .compose(lifecycleProvider.bindToLifecycle())
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).cache();
+
+        facObservable.subscribe(faculty -> rootFaculty = faculty);
 
         setToolbarTitle(facObservable);
         loadCoverImage(facObservable);
@@ -118,6 +124,35 @@ public class MainActivity extends BaseUsosActivity {
                 );
     }
 
+    private void onFabPressed(View view)
+    {
+        if (rootFaculty == null) {
+            Snackbar.make(view, "Please wait while the info loads", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        } else {
+            int cx = (view.getLeft() + view.getRight()) / 2;
+            int cy = (view.getTop() + view.getBottom()) / 2;
+            infoFragment = RootInfoFragment.newInstance(rootFaculty, cx, cy);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .add(R.id.main_layout, infoFragment).commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (infoFragment != null) {
+            if (infoFragment.onBackPressed())
+                detachInfoFragment();
+        } else
+            super.onBackPressed();
+    }
+
+    private void detachInfoFragment() {
+        infoFragment = null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,10 +162,7 @@ public class MainActivity extends BaseUsosActivity {
         getSupportActionBar().setTitle("");
         toolbarImage = (ImageView)findViewById(R.id.toolbar_image);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show()
-        );
+        fab.setOnClickListener(view -> onFabPressed(view));
 
         RecyclerView childrenList = (RecyclerView)findViewById(R.id.children_list);
         childrenList.setLayoutManager(new LinearLayoutManager(this));

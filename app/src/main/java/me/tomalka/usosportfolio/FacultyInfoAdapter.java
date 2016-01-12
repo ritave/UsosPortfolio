@@ -28,22 +28,7 @@ public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.
     @Override
     public void onBindViewHolder(FacultyInfoHolder holder, int position) {
         FacultyInfo info = faculties.get(position);
-        Context context = holder.itemView.getContext();
-
-        holder.card.setCoverPhoto(
-                Picasso
-                        .with(context)
-                        .load(info.getCoverPhotoUrl())
-                        .placeholder(R.drawable.usoslogo1_gradient_dark)
-                        .error(R.drawable.usoslogo1_gradient_dark)
-        );
-
-        holder.card.setCoverTitle(info.getFacName().get("pl"));
-        holder.card.setFacultyAddress(info.getPostalAddress());
-        if (info.getPhoneNumbers().size() != 0)
-            holder.card.setTelephoneNumber(info.getPhoneNumbers().get(0));
-        else
-            holder.card.setTelephoneNumber("");
+        holder.card.fromFacultyInfo(info);
     }
 
     @Override
