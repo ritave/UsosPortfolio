@@ -43,8 +43,10 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
 import me.tomalka.usosdroid.jsonapis.InstallationInfo;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends BaseUsosActivity implements RootInfoFragment.RootInfoFragmentListener {
     private final String ROOT_FAC_ID = "00000000";
@@ -53,6 +55,7 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
     private List<FacultyInfo> childrenData = new ArrayList<>();
     private FacultyInfoAdapter childrenAdapter = new FacultyInfoAdapter(childrenData);
     private FacultyInfo rootFaculty;
+    private CompositeSubscription subscription = new CompositeSubscription();
     RootInfoFragment infoFragment;
 
     @Override
@@ -63,30 +66,31 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
 
     private void loadFaculty(String facultyId)
     {
+        subscription.clear();
+
         Observable<FacultyInfo> facObservable =  getUsos().getFaculty(facultyId)
-                .compose(lifecycleProvider.bindToLifecycle())
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).cache();
 
-        facObservable.subscribe(
+        subscription.add(facObservable.subscribe(
                 faculty -> rootFaculty = faculty,
-                ex -> Log.e(LOGTAG, Log.getStackTraceString(ex)));
+                ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))));
 
-        setToolbarTitle(facObservable);
-        loadCoverImage(facObservable);
-        loadChildren(facObservable);
+        subscription.add(setToolbarTitle(facObservable));
+        subscription.add(loadCoverImage(facObservable));
+        subscription.add(loadChildren(facObservable));
     }
 
-    private void setToolbarTitle(Observable<FacultyInfo> obs)
+    private Subscription setToolbarTitle(Observable<FacultyInfo> obs)
     {
-        obs.subscribe(
+        return obs.subscribe(
                 info -> getSupportActionBar().setTitle(info.getFacName().get("pl")),
                 ex -> Log.e(LOGTAG, Log.getStackTraceString(ex))
         );
     }
 
-    private void loadCoverImage(Observable<FacultyInfo> obs)
+    private Subscription loadCoverImage(Observable<FacultyInfo> obs)
     {
-        obs.subscribe(
+        return obs.subscribe(
                 info ->
                 {
                     Picasso.with(this).load(info.getCoverPhotoUrl()).into(
@@ -114,7 +118,7 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
         );
     }
 
-    private void loadChildren(Observable<FacultyInfo> faculty)
+    private Subscription loadChildren(Observable<FacultyInfo> faculty)
     {
         Observable<FacultyInfo> obs = getUsos()
                 .getFacultyChildren(faculty);
@@ -123,7 +127,7 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
             obs = obs.filter(info -> info.gotAnyCoverPhoto() &&
                     (info.getPhoneNumbers().size() != 0 || (info.getPostalAddress() != null && !info.getPostalAddress().isEmpty())));
 
-        obs.observeOn(AndroidSchedulers.mainThread())
+        return obs.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> {
                             childrenData.add(data);
                             childrenAdapter.notifyItemInserted(childrenData.size() - 1);
@@ -190,6 +194,12 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        subscription.clear();
     }
 
     /*
