@@ -54,12 +54,9 @@ public class MainActivity extends BaseUsosActivity implements RootInfoFragment.R
     public void setRootFaculty(FacultyInfo faculty) {
         rootFaculty = faculty;
         if (faculty != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setTitle(faculty.getFacName().get("pl"));
-        } else {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setTitle("asdasd");
         }
+
         loadCoverImage(faculty);
     }
 

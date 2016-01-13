@@ -1,5 +1,6 @@
 package me.tomalka.usosportfolio.presenter;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.squareup.picasso.Picasso;
@@ -47,28 +48,29 @@ public class MainPresenter implements MVPPresenter<MainView> {
         view.setProgressIndicator(true);
         view.setRootFaculty(null);
         view.setChildrenFaculties(null);
-        usos
-                .getFaculty(ROOT_FAC_ID)
-                .subscribeOn(getScheduler())
-                .observeOn(getScheduler())
-                .flatMap(facultyInfo -> {
-                    rootFaculty = facultyInfo;
-                    Picasso.with(view.getContext()).load(facultyInfo.getCoverPhotoUrl()).fetch();
-                    return loadChildrenFaculties(rootFaculty);
-                })
-                .toList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(faculties -> {
-                            view.setProgressIndicator(false);
-                            view.setRootFaculty(rootFaculty);
-                            view.setChildrenFaculties(faculties);
-                            view.setErrorMessage("");
-                        },
-                        ex -> {
-                            view.setProgressIndicator(false);
-                            setFacultyError(ex);
-                        }
-                );
+        subscription.add(
+            usos
+                    .getFaculty(ROOT_FAC_ID)
+                    .subscribeOn(getScheduler())
+                    .observeOn(getScheduler())
+                    .flatMap(facultyInfo -> {
+                        rootFaculty = facultyInfo;
+                        return loadChildrenFaculties(rootFaculty);
+                    })
+                    .toList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(faculties -> {
+                                view.setProgressIndicator(false);
+                                view.setRootFaculty(rootFaculty);
+                                view.setChildrenFaculties(faculties);
+                                view.setErrorMessage("");
+                            },
+                            ex -> {
+                                view.setProgressIndicator(false);
+                                setFacultyError(ex);
+                            }
+                    )
+        );
     }
 
     // For testing
@@ -82,9 +84,7 @@ public class MainPresenter implements MVPPresenter<MainView> {
 
     private Observable<FacultyInfo> loadChildrenFaculties(FacultyInfo faculty) {
         Observable<FacultyInfo> obs = usos
-                .getFacultyChildren(faculty)
-                .subscribeOn(getScheduler())
-                .observeOn(getScheduler());
+                .getFacultyChildren(faculty);
 
         if (DEMO_MODE == true) // Nice hack huh ;)
             obs = obs.filter(info -> info.gotAnyCoverPhoto() &&
