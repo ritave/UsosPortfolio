@@ -1,17 +1,13 @@
-package me.tomalka.usosportfolio;
+package me.tomalka.usosportfolio.view;
 
-import android.animation.Animator;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.google.gson.Gson;
 
@@ -20,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
+import me.tomalka.usosportfolio.BaseUsosActivity;
+import me.tomalka.usosportfolio.R;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -27,6 +25,7 @@ public class RootInfoFragment extends Fragment {
     private static final String ARG_FACULTY = "faculty";
     private static final String ARG_CX = "cx";
     private static final String ARG_CY = "cy";
+    private static final String TAG = "RootInfoFragment";
 
     private FacultyInfo facultyInfo;
     private FacultyCard facultyCard;
@@ -128,19 +127,19 @@ public class RootInfoFragment extends Fragment {
         }
         SupportAnimator animator = ViewAnimationUtils
                 .createCircularReveal(root.findViewById(R.id.fragment_anim_layout), cx, cy, startRadius, finalRadius);
-        animator.setDuration(500);
+        animator.setDuration(300);
 
         // So supportanimator has some problems with finished callbacks...;
         Observable
                 .just(null)
-                .delay(500, TimeUnit.MILLISECONDS)
+                .delay(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(n -> {
                             animationInProgress = false;
                             if (inverse && mListener != null)
                                 mListener.RequestClose();
                         },
-                        ex -> Log.e(BaseUsosActivity.LOGTAG, Log.getStackTraceString(ex))
+                        ex -> Log.e(TAG, Log.getStackTraceString(ex))
                 );
 
         animator.start();

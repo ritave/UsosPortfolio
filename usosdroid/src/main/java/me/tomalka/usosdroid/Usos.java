@@ -65,13 +65,11 @@ public class Usos {
         return result;
     }
 
-    public Observable<FacultyInfo> getFacultyChildren(Observable<FacultyInfo> info)
+    public Observable<FacultyInfo> getFacultyChildren(FacultyInfo faculty)
     {
         // Load a list of children ids, and then load info about each one
-        return info
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .flatMap(facInfo -> service.loadFacultyChildrenIds(facInfo.getFacultyId()))
+        return service
+                .loadFacultyChildrenIds(faculty.getFacultyId())
                 .flatMap(idsList -> getFaculties(idsList))
                 .filter(facInfo -> facInfo.isPublic());
     }

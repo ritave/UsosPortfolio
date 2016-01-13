@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.tomalka.usosportfolio.RootInfoFragment">
+    tools:context=".view.RootInfoFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:clickable="true"
             android:id="@+id/root_info_black"/>
 
-        <me.tomalka.usosportfolio.FacultyCard
+        <me.tomalka.usosportfolio.view.FacultyCard
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

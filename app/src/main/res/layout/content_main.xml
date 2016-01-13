@@ -7,33 +7,40 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="35dp"
-        android:textColor="@android:color/secondary_text_light"
-        android:textSize="18sp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:textAlignment="center"
-        android:text="Failed to load data. You retry by pulling down to refresh"
-        android:visibility="gone"/>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/refresh_layout">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/children_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            tools:context="me.tomalka.usosportfolio.MainActivity"
+            tools:context=".view.MainActivity"
             tools:showIn="@layout/activity_main"
             tools:listitem="@layout/faculty_card_row"
             android:paddingTop="35dp"
             android:clipToPadding="false"
+            android:clickable="true"
             />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="35dp"
+                android:textColor="@android:color/secondary_text_light"
+                android:textSize="18sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"
+                android:id="@+id/error_text"
+                android:visibility="gone"/>
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

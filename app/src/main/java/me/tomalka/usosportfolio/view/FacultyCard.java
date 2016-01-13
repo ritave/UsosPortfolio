@@ -1,4 +1,4 @@
-package me.tomalka.usosportfolio;
+package me.tomalka.usosportfolio.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
+import me.tomalka.usosportfolio.R;
 
 public class FacultyCard extends CardView {
     private ImageView coverImage;

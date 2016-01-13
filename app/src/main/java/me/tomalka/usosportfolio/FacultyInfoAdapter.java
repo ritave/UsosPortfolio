@@ -1,23 +1,21 @@
 package me.tomalka.usosportfolio;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Picasso;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
+import me.tomalka.usosportfolio.view.FacultyCard;
 
 public class FacultyInfoAdapter extends RecyclerView.Adapter<FacultyInfoAdapter.FacultyInfoHolder> {
-    List<FacultyInfo> faculties;
+    List<FacultyInfo> faculties = new ArrayList<>();
 
-    FacultyInfoAdapter(List<FacultyInfo> faculties) {
+    public FacultyInfoAdapter(List<FacultyInfo> faculties) {
         this.faculties = faculties;
     }
-
 
     @Override
     public FacultyInfoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
