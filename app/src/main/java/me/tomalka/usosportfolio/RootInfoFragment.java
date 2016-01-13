@@ -79,12 +79,8 @@ public class RootInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        v.post(() -> {
-            if (savedInstanceState == null)
-                animate(false, -1, -1);
-        });/*
-        if (!isDetached() && v.post())
-            animate(false, -1, -1);*/
+        if (savedInstanceState == null)
+            animate(false, -1, -1);
     }
 
     @Override
