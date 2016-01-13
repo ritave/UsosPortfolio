@@ -79,7 +79,12 @@ public class RootInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        animate(false, -1, -1);
+        v.post(() -> {
+            if (savedInstanceState == null)
+                animate(false, -1, -1);
+        });/*
+        if (!isDetached() && v.post())
+            animate(false, -1, -1);*/
     }
 
     @Override
@@ -96,7 +101,7 @@ public class RootInfoFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+        mListener = null;
     }
 
     public boolean onBackPressed() {
@@ -105,7 +110,7 @@ public class RootInfoFragment extends Fragment {
     }
 
     private void animate(boolean inverse, int cx, int cy) {
-        if (animationInProgress)
+        if (animationInProgress || getView() == null)
             return;
 
         animationInProgress = true;
@@ -136,7 +141,7 @@ public class RootInfoFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(n -> {
                             animationInProgress = false;
-                            if (inverse)
+                            if (inverse && mListener != null)
                                 mListener.RequestClose();
                         },
                         ex -> Log.e(BaseUsosActivity.LOGTAG, Log.getStackTraceString(ex))
