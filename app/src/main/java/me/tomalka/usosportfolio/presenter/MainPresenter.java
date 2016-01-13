@@ -23,8 +23,8 @@ public class MainPresenter implements MVPPresenter<MainView> {
     public static final String TAG = "MainPresenter";
     public static final boolean DEMO_MODE = true;
 
-    private static final String PROVIDER = "https://usosapps.uw.edu.pl/services/";
-    private final String ROOT_FAC_ID = "00000000";
+    public static final String PROVIDER = "https://usosapps.uw.edu.pl/services/";
+    public static final String ROOT_FAC_ID = "00000000";
 
     private Usos usos = new Usos(PROVIDER);
     private MainView view;

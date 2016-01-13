@@ -3,6 +3,7 @@ package me.tomalka.usosportfolio.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
@@ -25,12 +26,11 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
-import me.tomalka.usosportfolio.BaseUsosActivity;
 import me.tomalka.usosportfolio.FacultyInfoAdapter;
 import me.tomalka.usosportfolio.R;
 import me.tomalka.usosportfolio.presenter.MainPresenter;
 
-public class MainActivity extends BaseUsosActivity implements RootInfoFragment.RootInfoFragmentListener, MainView {
+public class MainActivity extends AppCompatActivity implements RootInfoFragment.RootInfoFragmentListener, MainView {
     private final static String TAG = "MainActivity";
 
     private ImageView toolbarImage;

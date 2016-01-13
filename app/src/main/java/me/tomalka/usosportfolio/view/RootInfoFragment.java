@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 import me.tomalka.usosdroid.jsonapis.FacultyInfo;
-import me.tomalka.usosportfolio.BaseUsosActivity;
 import me.tomalka.usosportfolio.R;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
