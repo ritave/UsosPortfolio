@@ -94,7 +94,7 @@ public class MainPresenterTest {
 
         mainPresenter.loadFaculties();
 
-        verify(mainView).setRootFaculty(notNull(FacultyInfo.class));
+        verify(mainView).setRootFaculty(rootFaculty);
         ArgumentCaptor<List> childrenCaptor = ArgumentCaptor.forClass(List.class);
         verify(mainView, times(2)).setChildrenFaculties(childrenCaptor.capture());
         assertNull("Children list not reset", childrenCaptor.getAllValues().get(0));
