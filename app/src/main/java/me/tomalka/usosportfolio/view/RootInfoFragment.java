@@ -144,7 +144,7 @@ public class RootInfoFragment extends Fragment {
         animator.start();
     }
 
-    public static interface RootInfoFragmentListener {
+    public interface RootInfoFragmentListener {
         void RequestClose();
     }
 }
