@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +21,8 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/usoslogo1_gradient_dark"
-                android:id="@+id/faculty_card_cover"/>
+                android:id="@+id/faculty_card_cover"
+                tools:ignore="contentDescription"/>
 
             <View
                 android:layout_width="match_parent"
@@ -32,53 +35,38 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/faculty_card_title"
                 android:layout_margin="10dp"
-                android:text="Test faculty"
+                tools:text="Test faculty"
                 android:textSize="20sp"
                 android:textColor="@color/children_dark"
                 android:layout_gravity="bottom" />
         </FrameLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/faculty_card_map_view"
-            android:paddingRight="16dp">
+            android:drawableLeft="@drawable/ic_mappin"
+            android:drawableStart="@drawable/ic_mappin"
+            android:padding="16dp"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:id="@+id/faculty_card_map_text"
+            android:textColor="@android:color/holo_green_dark"
+            tools:text="2945 Pine Street Wadsworth, OH 44281"
+            android:textSize="15sp"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_mappin"
-                android:padding="16dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="15sp"
-                android:id="@+id/faculty_card_map_text"
-                android:gravity="center_vertical"
-                android:textColor="@android:color/holo_green_dark"
-                android:text="2945 Pine Street Wadsworth, OH 44281"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/faculty_card_phone_view"
-            android:paddingRight="16dp">
+            android:drawableLeft="@drawable/ic_telephone"
+            android:drawableStart="@drawable/ic_telephone"
+            android:padding="16dp"
+            android:drawablePadding="16dp"
+            android:id="@+id/faculty_card_phone_text"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/holo_green_dark"
+            android:textColorLink="@android:color/holo_green_dark"
+            android:autoLink="phone"
+            tools:text="555-123-456"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_telephone"
-                android:padding="16dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/faculty_card_phone_text"
-                android:gravity="center_vertical"
-                android:textColor="@android:color/holo_green_dark"
-                android:textColorLink="@android:color/holo_green_dark"
-                android:autoLink="phone"
-                android:text="555-123-456"/>
-        </LinearLayout>
     </LinearLayout>
 </merge>

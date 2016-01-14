@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- https://github.com/square/okio/issues/58 -->
+    <issue id="InvalidPackage">
+        <ignore regexp=".*okio.*" />
+        <ignore regexp=".*retrofit.*" />
+    </issue>
+    <!-- ic_telephone and ic_mapping were downloaded from internet and I don't have higher resolutions -->
+    <issue id="IconDensities">
+        <ignore path="src/main/res/drawable-xxxhdpi" />
+        <ignore path="src/main/res/drawable-xxxhdpi" />
+    </issue>
+    <!-- Lint doesn't handle onTouch lambda properly -->
+    <issue id="ClickableViewAccessibility">
+        <ignore path="src/main/java/me/tomalka/usosportfolio/view/RootInfoFragment.java" />
+    </issue>
+</lint>

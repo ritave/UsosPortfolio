@@ -1,5 +1,6 @@
 package me.tomalka.usosportfolio.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,6 +68,7 @@ public class RootInfoFragment extends Fragment {
         v.findViewById(R.id.root_info_black).setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 animate(true, (int) event.getX(), (int) event.getY());
+                view.performClick();
             }
             return true;
         });

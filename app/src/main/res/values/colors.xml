@@ -3,8 +3,6 @@
     <color name="colorPrimary">#fbb040</color>
     <color name="colorPrimaryDark">#e18f14</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="usosBGDark">#fcfefc</color>
-    <color name="children_light">#323232</color>
     <color name="children_dark">#fff</color>
     <color name="fabColor">#408BFB</color>
     <color name="rootInfoTint">#CC000000</color>

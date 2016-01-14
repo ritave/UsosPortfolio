@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:ignore="MergeRootFrame"> <!-- Ignoring because of the layout_behavior -->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
@@ -16,18 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/children_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            tools:context=".view.MainActivity"
-            tools:showIn="@layout/activity_main"
-            tools:listitem="@layout/faculty_card_row"
-            android:paddingTop="35dp"
-            android:clipToPadding="false"
-            android:clickable="true"
-            />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/children_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                tools:context=".view.MainActivity"
+                tools:showIn="@layout/activity_main"
+                tools:listitem="@layout/faculty_card_row"
+                android:paddingTop="35dp"
+                android:clipToPadding="false"
+                android:clickable="true"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,9 +40,8 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="20dp"
-                android:textAlignment="center"
-                android:id="@+id/error_text"
-                android:visibility="gone"/>
+                android:gravity="center"
+                android:id="@+id/error_text"/>
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

@@ -2,4 +2,5 @@
     <string name="app_name">UsosPortfolio</string>
     <string name="error_load_faculties">Failed to load the faculties, you can try refreshing by pulling down</string>
     <string name="snackbar_wait">Please wait while the info loads</string>
+    <string name="content_description_fab">Open university info</string>
 </resources>

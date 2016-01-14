@@ -22,8 +22,6 @@ import me.tomalka.usosportfolio.R;
 public class FacultyCard extends CardView {
     private ImageView coverImage;
     private TextView coverTitle;
-    private View phoneView;
-    private View mapView;
     private TextView phoneText;
     private TextView mapText;
     private CharSequence rawAddress;
@@ -87,9 +85,9 @@ public class FacultyCard extends CardView {
         if (telephone != null && telephone.length() != 0)
         {
             phoneText.setText(telephone);
-            phoneView.setVisibility(View.VISIBLE);
+            phoneText.setVisibility(View.VISIBLE);
         } else
-            phoneView.setVisibility(View.GONE);
+            phoneText.setVisibility(View.GONE);
     }
 
     public CharSequence getTelephoneNumber() {
@@ -104,9 +102,9 @@ public class FacultyCard extends CardView {
             SpannableString spanStr = new SpannableString(address);
             spanStr.setSpan(new UnderlineSpan(), 0, spanStr.length(), 0);
             mapText.setText(spanStr);
-            mapView.setVisibility(View.VISIBLE);
+            mapText.setVisibility(View.VISIBLE);
         } else
-            mapView.setVisibility(View.GONE);
+            mapText.setVisibility(View.GONE);
     }
 
     public CharSequence getFacultyAddress(CharSequence address) {
@@ -118,9 +116,7 @@ public class FacultyCard extends CardView {
 
         coverImage = (ImageView)findViewById(R.id.faculty_card_cover);
         coverTitle = (TextView)findViewById(R.id.faculty_card_title);
-        phoneView = findViewById(R.id.faculty_card_phone_view);
         phoneText = (TextView)findViewById(R.id.faculty_card_phone_text);
-        mapView = findViewById(R.id.faculty_card_map_view);
         mapText = (TextView)findViewById(R.id.faculty_card_map_text);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FacultyCard, defStyleAttr,
