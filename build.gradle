@@ -11,7 +11,12 @@ buildscript {
         // in the individual module build.gradle files
 
         classpath 'me.tatarka:gradle-retrolambda:3.2.4'
+        // Android lint fails with retrolambda, this project makes it work
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
     }
+
+    // Exclude the version that the android plugin depends on.
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
 allprojects {
