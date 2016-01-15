@@ -3,7 +3,7 @@ Usos Portfolio
 
 [![Build Status](https://travis-ci.org/ritave/UsosPortfolio.svg?branch=master)](https://travis-ci.org/ritave/UsosPortfolio)
 
-This is a show off Android application for my portfolio.
+This is a show off Android application for my portfolio. [It can be seen on Play Store here.](https://play.google.com/store/apps/details?id=me.tomalka.usosportfolio)
 
 It showcases material design, animations, proper REST communication as well as Model-View-Presenter code architecture.
 
